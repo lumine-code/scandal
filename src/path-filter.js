@@ -11,7 +11,7 @@
  */
 
 const {Minimatch} = require('minimatch');
-const GitUtils = require('git-utils');
+const GitUtils = require('@pulsar-edit/git-utils');
 const path = require('path');
 const fs = require('fs');
 
@@ -29,7 +29,7 @@ class PathFilter {
   // * `rootPath` {String} top level directory to scan. eg. `/Users/ben/somedir`
   // * `options` {Object} options hash
   //   * `excludeVcsIgnores` {Boolean}; default false; true to exclude paths
-  //      defined in a .gitignore. Uses git-utils to check ignred files.
+  //      defined in a .gitignore. Uses git-utils to check ignored files.
   //   * `inclusions` {Array} of patterns to include. Uses minimatch with a couple
   //      additions: `['dirname']` and `['dirname/']` will match all paths in
   //      directory dirname.

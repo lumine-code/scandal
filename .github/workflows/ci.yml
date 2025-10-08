@@ -9,7 +9,7 @@ jobs:
  Build:
   runs-on: ubuntu-latest
   env:
-    NODE_VERSION: 16
+    NODE_VERSION: 20
     CC: clang
     CXX: clang++
     npm_config_clang: 1
