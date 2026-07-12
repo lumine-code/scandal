@@ -20,7 +20,7 @@
   "homepage": "http://atom.github.io/scandal",
   "dependencies": {
     "argparse": "^1.0.2",
-    "@pulsar-edit/git-utils": "^7.0.1",
+    "@pulsar-edit/git-utils": "https://github.com/lumine-code/git-utils.git#43489980cb6b42e46956b1a77985709cf5fb4bfe",
     "isbinaryfile": "^3.0.3",
     "minimatch": "^2.0.9",
     "split": "^1.0.0",
