@@ -1,8 +1,9 @@
 const fs = require('fs');
-const temp = require('temp').track();
+const path = require('path');
+const {randomUUID} = require('crypto');
 const {EventEmitter} = require('events');
 const {Transform} = require('stream');
-const {EOL} = require('os');
+const {tmpdir} = require('os');
 
 const ChunkedExecutor = require('./chunked-executor');
 const ChunkedLineReader = require('./chunked-line-reader');
@@ -70,7 +71,7 @@ class PathReplacer extends EventEmitter {
     }
 
     const replacer = new ReplaceTransformer(regex, replacementText, {dryReplace: this.dryReplace});
-    const output = temp.createWriteStream();
+    const output = fs.createWriteStream(path.join(tmpdir(), `scandal-${process.pid}-${randomUUID()}`));
 
     output.on('finish', () => {
       let replacements;
@@ -82,7 +83,9 @@ class PathReplacer extends EventEmitter {
 
       const readStream = fs.createReadStream(output.path);
       const writeStream = fs.createWriteStream(filePath);
-      writeStream.on('finish', () => doneCallback(result));
+      writeStream.on('finish', () => {
+        fs.rm(output.path, {force: true}, () => doneCallback(result));
+      });
 
       try {
         return readStream.pipe(writeStream);

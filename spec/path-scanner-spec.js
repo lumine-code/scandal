@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const wrench = require('wrench');
 const PathScanner = require('../src/path-scanner');
 
 describe("PathScanner", function() {
@@ -305,15 +304,15 @@ describe("PathScanner", function() {
     beforeEach(function() {
       rootPath = fs.realpathSync(path.join('spec', 'fixtures', 'git'));
       subDirPath = fs.realpathSync(path.join(rootPath, 'src'));
-      wrench.copyDirSyncRecursive(path.join(rootPath, 'git.git'), path.join(rootPath, '.git'));
-      wrench.rmdirSyncRecursive(path.join(rootPath, 'git.git'));
+      fs.cpSync(path.join(rootPath, 'git.git'), path.join(rootPath, '.git'), {recursive: true});
+      fs.rmSync(path.join(rootPath, 'git.git'), {recursive: true, force: true});
       fs.writeFileSync(path.join(rootPath, 'ignored.txt'), "This must be added in the spec because the file can't be checked in!");
       fs.writeFileSync(path.join(rootPath, 'src', 'ignored.txt'), "This must be added in the spec because the file can't be checked in!");
     });
 
     afterEach(function() {
-      wrench.copyDirSyncRecursive(path.join(rootPath, '.git'), path.join(rootPath, 'git.git'));
-      wrench.rmdirSyncRecursive(path.join(rootPath, '.git'));
+      fs.cpSync(path.join(rootPath, '.git'), path.join(rootPath, 'git.git'), {recursive: true});
+      fs.rmSync(path.join(rootPath, '.git'), {recursive: true, force: true});
     });
 
     it("excludes files specified with .gitignore", function() {

@@ -17,16 +17,17 @@
   },
   "bugs": "https://github.com/lumine-code/scandal/issues",
   "homepage": "https://github.com/lumine-code/scandal",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
-    "argparse": "^1.0.2",
-    "@lumine-code/git-utils": "https://github.com/lumine-code/git-utils.git#ee42ee3af0518c65b17f3e77e792dadba296738e",
-    "isbinaryfile": "^3.0.3",
-    "minimatch": "^2.0.9",
-    "split": "^1.0.0",
-    "temp": "^0.8.3"
+    "argparse": "^2.0.1",
+    "@lumine-code/git-utils": "https://github.com/lumine-code/git-utils.git#dd0f9222513177c05747d0d747bf4d48b3599d3e",
+    "isbinaryfile": "^5.0.6",
+    "minimatch": "^10.2.5",
+    "split": "^1.0.0"
   },
   "devDependencies": {
-    "jasmine-focused": "^1.0.7",
-    "wrench": "^1.5.8"
+    "@lumine-code/jasmine-focused": "https://github.com/lumine-code/jasmine-focused.git#6d04426bcb107dc44b148a6d48172c918326c068"
   }
 }

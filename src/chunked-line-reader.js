@@ -1,5 +1,5 @@
 const fs = require("fs");
-const isBinaryFile = require("isbinaryfile");
+const {isBinaryFileSync} = require("isbinaryfile");
 const {Readable} = require('stream');
 const {StringDecoder} = require('string_decoder');
 
@@ -36,7 +36,7 @@ class ChunkedLineReader extends Readable {
 
   isBinaryFile() {
     const fd = fs.openSync(this.filePath, "r");
-    const isBin = isBinaryFile.sync(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256));
+    const isBin = isBinaryFileSync(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256));
     fs.closeSync(fd);
     return isBin;
   }
@@ -49,7 +49,7 @@ class ChunkedLineReader extends Readable {
       let remainder = '';
       const chunkSize = this.CHUNK_SIZE;
       if (
-        isBinaryFile.sync(
+        isBinaryFileSync(
           this.headerBuffer,
           fs.readSync(fd, this.headerBuffer, 0, 256)
         )
