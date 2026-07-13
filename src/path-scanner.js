@@ -50,7 +50,6 @@ class PathScanner extends EventEmitter {
     this.rootPath = rootPath;
     this.options = options;
     this.asyncCallsInProgress = 0;
-    this.realPathCache = {};
     this.rootPath = path.resolve(this.rootPath);
     this.rootPathLength = this.rootPath.length;
     this.pathFilter = new PathFilter(this.rootPath, this.options);
@@ -138,10 +137,17 @@ class PathScanner extends EventEmitter {
   isInternalSymlink(filePath) {
     let realPath = null;
     try {
-      realPath = fs.realpathSync(filePath, this.realPathCache);
+      realPath = fs.realpathSync(filePath);
     } catch (error) {}
        // ignore
-    return (realPath != null ? realPath.search(this.rootPath) : undefined) === 0;
+    if (realPath == null) { return false; }
+
+    const relativePath = path.relative(this.rootPath, realPath);
+    return relativePath === '' || (
+      relativePath !== '..' &&
+      !relativePath.startsWith(`..${DIR_SEP}`) &&
+      !path.isAbsolute(relativePath)
+    );
   }
 
   asyncCallStarting() {
