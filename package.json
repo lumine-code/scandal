@@ -19,7 +19,7 @@
   "homepage": "https://github.com/lumine-code/scandal",
   "dependencies": {
     "argparse": "^1.0.2",
-    "@lumine-code/git-utils": "https://github.com/lumine-code/git-utils.git#a37861c2c6b09c2980e116d30e191416e630d391",
+    "@lumine-code/git-utils": "https://github.com/lumine-code/git-utils.git#ee42ee3af0518c65b17f3e77e792dadba296738e",
     "isbinaryfile": "^3.0.3",
     "minimatch": "^2.0.9",
     "split": "^1.0.0",
