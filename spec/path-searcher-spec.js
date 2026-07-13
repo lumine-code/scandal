@@ -94,9 +94,10 @@ describe("PathSearcher", function() {
 
     describe("When the file doesnt exist", () => it("returns error in the doneCallback and emits an 'error' event when the path does not exist", function() {
       let errorHandler, finishedHandler, resultsHandler;
+      const missingPath = path.resolve(path.parse(rootPath).root, 'this-does-not-exist.js');
       searcher.on('file-error', (errorHandler = jasmine.createSpy()));
       searcher.on('results-found', (resultsHandler = jasmine.createSpy()));
-      searcher.searchPath(/nope/gi, '/this-does-not-exist.js', (finishedHandler = jasmine.createSpy()));
+      searcher.searchPath(/nope/gi, missingPath, (finishedHandler = jasmine.createSpy()));
 
       waitsFor(() => finishedHandler.callCount > 0);
 
@@ -106,7 +107,7 @@ describe("PathSearcher", function() {
         expect(finishedHandler.mostRecentCall.args[1].code).toBe('ENOENT');
 
         expect(errorHandler).toHaveBeenCalled();
-        expect(errorHandler.mostRecentCall.args[0].path).toBe('/this-does-not-exist.js');
+        expect(errorHandler.mostRecentCall.args[0].path).toBe(missingPath);
         expect(errorHandler.mostRecentCall.args[0].code).toBe('ENOENT');
       });
     }));

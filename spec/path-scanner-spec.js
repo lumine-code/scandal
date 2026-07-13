@@ -27,17 +27,18 @@ describe("PathScanner", function() {
       waitsFor(() => pathHandler.callCount > 0);
       waitsFor(() => finishedHandler.callCount > 0);
       runs(function() {
-        // symlink-to-file1.txt is a file on windows
-        if (process.platform === 'win32') {
-          expect(paths.length).toBe(19);
-        } else {
-          expect(paths.length).toBe(18);
-        }
+        const symlinkToFile = path.join(rootPath, 'symlink-to-file1.txt');
+        const symlinkToDirectory = path.join(rootPath, 'symlink-to-directory');
+        const fixtureSymlinkCount = [symlinkToFile, symlinkToDirectory]
+          .filter(candidate => fs.lstatSync(candidate).isSymbolicLink()).length;
+        expect(paths.length).toBe(20 - fixtureSymlinkCount);
 
         expect(paths).toContain(path.join(rootPath, 'file1.txt'));
         expect(paths).toContain(path.join(rootPath, 'dir', 'file7_ignorable.rb'));
         expect(paths).not.toContain(path.join(rootPath, 'symlink-to-directory', 'file7_ignorable.rb'));
-        expect(paths).not.toContain(path.join(rootPath, 'symlink-to-file1.txt'));
+        if (fs.lstatSync(symlinkToFile).isSymbolicLink()) {
+          expect(paths).not.toContain(symlinkToFile);
+        }
       });
     });
 
@@ -173,7 +174,7 @@ describe("PathScanner", function() {
 
       it("allows a local inclusion of a subdirectory to override a global directory exclusion", function() {
         let finishedHandler, pathHandler;
-        const scanner = new PathScanner(rootPath, {inclusions: ['newdir/seconddir'], globalExclusions: ['newdir']});
+        const scanner = new PathScanner(rootPath, {inclusions: [path.join('newdir', 'seconddir')], globalExclusions: ['newdir']});
         scanner.on('path-found', (pathHandler = createPathCollector()));
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 

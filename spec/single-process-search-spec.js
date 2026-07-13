@@ -31,7 +31,7 @@ describe("search", function() {
     runs(function() {
       expect(resultsHandler.callCount).toBe(3);
 
-      const regex = /many-files\/sample(-)?.*\.js/g;
+      const regex = /many-files[\\/]sample(-)?.*\.js/g;
       expect(resultsHandler.argsForCall[0][0].filePath).toMatch(regex);
       expect(resultsHandler.argsForCall[1][0].filePath).toMatch(regex);
       expect(resultsHandler.argsForCall[2][0].filePath).toMatch(regex);

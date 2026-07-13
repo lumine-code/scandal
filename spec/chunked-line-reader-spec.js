@@ -159,7 +159,7 @@ describe("ChunkedLineReader", function() {
 
     runs(function() {
       const sampleText = fs.readFileSync(rootPath, {encoding: 'utf8'});
-      const sampleLines = sampleText.trim().split("\n");
+      const sampleLines = sampleText.trim().split(/\r?\n/);
 
       expect(reader.encoding).toBe('utf8');
       expect(allLines.length).toEqual(sampleLines.length);

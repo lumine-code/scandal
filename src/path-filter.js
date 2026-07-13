@@ -20,6 +20,10 @@ module.exports =
 class PathFilter {
   static MINIMATCH_OPTIONS = { matchBase: true, dot: true };
 
+  static normalizeSeparators(filepath) {
+    return filepath.replace(/\\/g, '/');
+  }
+
   static escapeRegExp(str) {
     return str.replace(/([\/'*+?|()\[\]{}.\^$])/g, '\\$1');
   }
@@ -131,6 +135,7 @@ class PathFilter {
   // match `filepath`.
   getMatchingItems(matchers, filepath, stopAfterFirst) {
     if (stopAfterFirst == null) { stopAfterFirst = false; }
+    filepath = PathFilter.normalizeSeparators(filepath);
     let index = matchers.length;
     const result = [];
     while (index--) {
@@ -171,10 +176,7 @@ class PathFilter {
   isSubpathMatcher(parent, child) {
     // Strip off trailing wildcards from the parent pattern
     let parentPattern = parent.pattern;
-    const directoryPattern = new RegExp(`\
-${'\\'+path.sep}\\*$|\
-${'\\'+path.sep}\\*\\*$\
-`);
+    const directoryPattern = /\/\*$|\/\*\*$/;
     const matchIndex = parentPattern.search(directoryPattern);
     if (matchIndex > -1) { parentPattern = parentPattern.slice(0, matchIndex); }
 
@@ -222,7 +224,7 @@ ${'\\'+path.sep}\\*\\*$\
       // matching 'directory/anotherdir/file.txt' against pattern
       // 'directory/anotherdir'.
 
-      if (pattern[pattern.length - 1] === path.sep) {
+      if (pattern[pattern.length - 1] === '/') {
         pattern += '**';
       }
 
@@ -239,23 +241,20 @@ ${'\\'+path.sep}\\*\\*$\
       // 'some/directory/anotherdir/**' matcher the user originally specified.
       if (deepMatch) {
         let needle;
-        const paths = pattern.split(path.sep);
+        const paths = pattern.split('/');
         let lastIndex = paths.length - 2;
         if ((needle = paths[paths.length - 1], ['*', '**'].includes(needle))) { lastIndex--; }
 
         if (lastIndex >= 0) {
           let deepPath = '';
           for (let i = 0, end = lastIndex, asc = 0 <= end; asc ? i <= end : i >= end; asc ? i++ : i--) {
-            deepPath = path.join(deepPath, paths[i]);
+            deepPath = path.posix.join(deepPath, paths[i]);
             addDirectoryMatcher(matchers, deepPath);
           }
         }
       }
 
-      const directoryPattern = new RegExp(`\
-${'\\'+path.sep}\\*$|\
-${'\\'+path.sep}\\*\\*$\
-`);
+      const directoryPattern = /\/\*$|\/\*\*$/;
       const matchIndex = pattern.search(directoryPattern);
       if (matchIndex > -1) { addDirectoryMatcher(matchers, pattern.slice(0, matchIndex)); }
 
@@ -271,13 +270,10 @@ ${'\\'+path.sep}\\*\\*$\
 
     let r = patterns.length;
     while (r--) {
-      pattern = patterns[r].trim();
+      pattern = PathFilter.normalizeSeparators(patterns[r].trim());
       if ((pattern.length === 0) || (pattern[0] === '#')) { continue; }
 
-      const endsWithSeparatorOrStar = new RegExp(`\
-${'\\'+path.sep}$|\
-${'\\'+path.sep}\\**$\
-`);
+      const endsWithSeparatorOrStar = /\/$|\/\**$/;
       if (endsWithSeparatorOrStar.test(pattern)) {
         // Is a dir if it ends in a '/' or '/*'
         addDirectoryMatcher(matchers, pattern, deepMatch);
@@ -294,7 +290,7 @@ ${'\\'+path.sep}\\**$\
         if ((stat != null ? stat.isFile() : undefined)) {
           addFileMatcher(matchers, pattern);
         } else {
-          addDirectoryMatcher(matchers, pattern + path.sep + '**', deepMatch);
+          addDirectoryMatcher(matchers, pattern + '/**', deepMatch);
         }
       } else {
         addFileMatcher(matchers, pattern);

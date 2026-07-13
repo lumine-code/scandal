@@ -13,9 +13,10 @@ describe("PathReplacer", function() {
 
   describe("replacePath()", () => describe("when a file doesnt exist", () => it("returns error in the doneCallback and emits an 'error' event when the path does not exist", function() {
     let errorHandler, finishedHandler, replacedHandler;
+    const missingPath = path.resolve(path.parse(rootPath).root, 'this-does-not-exist.js');
     replacer.on('file-error', (errorHandler = jasmine.createSpy()));
     replacer.on('path-replaced', (replacedHandler = jasmine.createSpy()));
-    replacer.replacePath(/nope/gi, 'replacement', '/this-does-not-exist.js', (finishedHandler = jasmine.createSpy()));
+    replacer.replacePath(/nope/gi, 'replacement', missingPath, (finishedHandler = jasmine.createSpy()));
 
     waitsFor(() => finishedHandler.callCount > 0);
 
@@ -25,7 +26,7 @@ describe("PathReplacer", function() {
       expect(finishedHandler.mostRecentCall.args[1].code).toBe('ENOENT');
 
       expect(errorHandler).toHaveBeenCalled();
-      expect(errorHandler.mostRecentCall.args[0].path).toBe('/this-does-not-exist.js');
+      expect(errorHandler.mostRecentCall.args[0].path).toBe(missingPath);
       expect(errorHandler.mostRecentCall.args[0].code).toBe('ENOENT');
     });
   })));
