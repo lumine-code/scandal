@@ -1,4 +1,5 @@
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const PathScanner = require('../src/path-scanner');
 
@@ -301,18 +302,28 @@ describe("PathScanner", function() {
 
   describe("with a git repo", function() {
     let subDirPath = null;
+    const sourcePath = fs.realpathSync(path.join('spec', 'fixtures', 'git'));
+
+    // On Windows a recursive delete can transiently fail with EPERM/EBUSY while
+    // another process (a just-released libgit2 handle, the search indexer, or
+    // antivirus) still holds the `.git` object files. Retry with backoff.
+    const removeDir = dirPath => fs.rmSync(dirPath, {recursive: true, force: true, maxRetries: 20, retryDelay: 50});
+
     beforeEach(function() {
-      rootPath = fs.realpathSync(path.join('spec', 'fixtures', 'git'));
+      // Work in a throwaway copy so a transient lock during cleanup can never
+      // corrupt the committed fixture or leak into other specs. A `.git`
+      // directory can't be checked in, so the fixture stores it as `git.git`
+      // and it is copied into place as `.git` here.
+      rootPath = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'scandal-git-')));
+      fs.cpSync(sourcePath, rootPath, {recursive: true, filter: src => path.basename(src) !== 'git.git'});
+      fs.cpSync(path.join(sourcePath, 'git.git'), path.join(rootPath, '.git'), {recursive: true});
       subDirPath = fs.realpathSync(path.join(rootPath, 'src'));
-      fs.cpSync(path.join(rootPath, 'git.git'), path.join(rootPath, '.git'), {recursive: true});
-      fs.rmSync(path.join(rootPath, 'git.git'), {recursive: true, force: true});
       fs.writeFileSync(path.join(rootPath, 'ignored.txt'), "This must be added in the spec because the file can't be checked in!");
       fs.writeFileSync(path.join(rootPath, 'src', 'ignored.txt'), "This must be added in the spec because the file can't be checked in!");
     });
 
     afterEach(function() {
-      fs.cpSync(path.join(rootPath, '.git'), path.join(rootPath, 'git.git'), {recursive: true});
-      fs.rmSync(path.join(rootPath, '.git'), {recursive: true, force: true});
+      removeDir(rootPath);
     });
 
     it("excludes files specified with .gitignore", function() {

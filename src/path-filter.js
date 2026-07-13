@@ -151,6 +151,17 @@ class PathFilter {
     return (this.repo != null ? this.repo.isIgnored(this.repo.relativize(path.join(this.rootPath, filepath))) : undefined);
   }
 
+  // Public: Release the git repository opened for `.gitignore` checks, if any.
+  //
+  // Frees the underlying libgit2 handle so it does not leak and, on Windows,
+  // does not keep the `.git` directory locked.
+  closeRepository() {
+    if (this.repo != null) {
+      this.repo.release();
+      this.repo = null;
+    }
+  }
+
   // Given an array of `globalExclusions`, filter out any which have an
   // `inclusion` defined for a subdirectory
   overrideGlobalExclusions(globalExclusions, inclusions) {

@@ -156,6 +156,7 @@ class PathScanner extends EventEmitter {
 
   asyncCallDone() {
     if (--this.asyncCallsInProgress === 0) {
+      this.pathFilter.closeRepository();
       return this.emit('finished-scanning', this);
     }
   }
