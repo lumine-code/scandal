@@ -1,7 +1,8 @@
 {
   "name": "@lumine-code/scandal",
+  "author": "lumine-code",
   "version": "5.0.0",
-  "description": "Directory search and scan utilities",
+  "description": "Scans and searches directory trees with Git-aware filtering.",
   "main": "./src/scandal.js",
   "bin": {
     "scandal": "./bin/scandal"
@@ -9,14 +10,12 @@
   "scripts": {
     "test": "jasmine-focused --captureExceptions spec/"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/lumine-code/scandal.git"
-  },
+  "repository": "https://github.com/lumine-code/scandal",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/lumine-code/scandal/issues"
+  "publishConfig": {
+    "access": "public"
   },
+  "bugs": "https://github.com/lumine-code/scandal/issues",
   "homepage": "https://github.com/lumine-code/scandal",
   "dependencies": {
     "argparse": "^1.0.2",

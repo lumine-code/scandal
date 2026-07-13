@@ -1,6 +1,20 @@
-# @lumine-code/scandal - Scandalous directory scanning and searching
+# @lumine-code/scandal
 
-[![CI](https://github.com/lumine-code/scandal/actions/workflows/ci.yml/badge.svg)](https://github.com/lumine-code/scandal/actions/workflows/ci.yml)
+Scans and searches directory trees with Git-aware filtering.
+
+## Features
+
+- **Directory scanning**: walks trees with configurable inclusions, exclusions, and hidden-file handling.
+- **Git-aware filtering**: respects repository ignore rules through `@lumine-code/git-utils`.
+- **Search and replace**: streams regular-expression matches and applies replacements across files.
+
+## Installation
+
+```sh
+npm install @lumine-code/scandal
+```
+
+## Usage
 
 `scandal` provides two utilities:
 
@@ -48,7 +62,7 @@ scanner.scan();
 ### PathSearcher
 
 ```js
-const { PathSearcher } = require('scandal');
+const { PathSearcher } = require('@lumine-code/scandal');
 let searcher = new PathSearcher();
 
 // You can subscribe to a `results-found` event
@@ -95,7 +109,7 @@ A third object, `PathFilter`, is available, but intended for use by the `PathSca
 If you dont want to think about combining the `PathScanner` and `PathSearcher` in your own way, a `search` function is provided.
 
 ```js
-const { search, PathScanner, PathSearcher } = require('scandal');
+const { search, PathScanner, PathSearcher } = require('@lumine-code/scandal');
 
 let path = '/path/to/search';
 let scanner = new PathScanner(path, { excludeVcsIgnores: true });
@@ -112,3 +126,7 @@ search(/text/ig, scanner, searcher, () => {
   console.timeEnd(name);
 });
 ```
+
+## Contributing
+
+Got ideas to make this package better, found a bug, or want to help add new features? Just drop your thoughts on GitHub. Any feedback is welcome!
