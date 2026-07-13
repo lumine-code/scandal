@@ -11,7 +11,7 @@
  */
 
 const {Minimatch} = require('minimatch');
-const GitUtils = require('@pulsar-edit/git-utils');
+const GitUtils = require('@lumine-code/git-utils');
 const path = require('path');
 const fs = require('fs');
 

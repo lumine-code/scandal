@@ -1,6 +1,6 @@
 {
-  "name": "@pulsar-edit/scandal",
-  "version": "4.0.0",
+  "name": "@lumine-code/scandal",
+  "version": "5.0.0",
   "description": "Directory search and scan utilities",
   "main": "./src/scandal.js",
   "bin": {
@@ -11,16 +11,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pulsar-edit/scandal.git"
+    "url": "https://github.com/lumine-code/scandal.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pulsar-edit/scandal/issues"
+    "url": "https://github.com/lumine-code/scandal/issues"
   },
-  "homepage": "http://atom.github.io/scandal",
+  "homepage": "https://github.com/lumine-code/scandal",
   "dependencies": {
     "argparse": "^1.0.2",
-    "@pulsar-edit/git-utils": "https://github.com/lumine-code/git-utils.git#43489980cb6b42e46956b1a77985709cf5fb4bfe",
+    "@lumine-code/git-utils": "https://github.com/lumine-code/git-utils.git#a37861c2c6b09c2980e116d30e191416e630d391",
     "isbinaryfile": "^3.0.3",
     "minimatch": "^2.0.9",
     "split": "^1.0.0",

@@ -1,6 +1,6 @@
-# scandal - Scandalous directory scanning and searching
+# @lumine-code/scandal - Scandalous directory scanning and searching
 
-[![CI](https://github.com/atom/scandal/actions/workflows/ci.yml/badge.svg)](https://github.com/atom/scandal/actions/workflows/ci.yml)
+[![CI](https://github.com/lumine-code/scandal/actions/workflows/ci.yml/badge.svg)](https://github.com/lumine-code/scandal/actions/workflows/ci.yml)
 
 `scandal` provides two utilities:
 
@@ -27,7 +27,7 @@ To be clear, scandal is not a CLI. It can be used from the terminal, but in prac
 Usage is simple:
 
 ```js
-const { PathScanner } = require('scandal');
+const { PathScanner } = require('@lumine-code/scandal');
 let scanner = new PathScanner('/Users/me/myDopeProject', options);
 
 scanner.on('path-found', (path) => console.log(path));
@@ -40,7 +40,7 @@ scanner.scan();
 
 #### options
 
-* _excludeVcsIgnores_ - bool; default false; true to exclude paths defined in a .gitignore. Uses [git-utils](http://atom.github.io/git-utils/) to check ignored files.
+* _excludeVcsIgnores_ - bool; default false; true to exclude paths defined in a .gitignore. Uses [@lumine-code/git-utils](https://github.com/lumine-code/git-utils) to check ignored files.
 * _inclusions_ - list of patterns to include. Uses [minimatch](https://github.com/isaacs/minimatch) with a couple additions: `['dirname']` and `['dirname/']` will match all paths in direcotry `dirname`
 * _exclusions_ - list of patterns to exclude. Same matcher as `inclusions`.
 * _includeHidden_ - bool; default false; true includes hidden files.
