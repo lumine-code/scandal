@@ -18,16 +18,16 @@ describe("PathReplacer", function() {
     replacer.on('path-replaced', (replacedHandler = jasmine.createSpy()));
     replacer.replacePath(/nope/gi, 'replacement', missingPath, (finishedHandler = jasmine.createSpy()));
 
-    waitsFor(() => finishedHandler.callCount > 0);
+    waitsFor(() => finishedHandler.calls.count() > 0);
 
     runs(function() {
       expect(replacedHandler).not.toHaveBeenCalled();
       expect(finishedHandler).toHaveBeenCalled();
-      expect(finishedHandler.mostRecentCall.args[1].code).toBe('ENOENT');
+      expect(finishedHandler.calls.mostRecent().args[1].code).toBe('ENOENT');
 
       expect(errorHandler).toHaveBeenCalled();
-      expect(errorHandler.mostRecentCall.args[0].path).toBe(missingPath);
-      expect(errorHandler.mostRecentCall.args[0].code).toBe('ENOENT');
+      expect(errorHandler.calls.mostRecent().args[0].path).toBe(missingPath);
+      expect(errorHandler.calls.mostRecent().args[0].code).toBe('ENOENT');
     });
   })));
 
@@ -47,12 +47,12 @@ describe("PathReplacer", function() {
       replacer.on('path-replaced', (resultsHandler = jasmine.createSpy()));
       replacer.replacePaths(/items/gi, 'omgwow', [filePath], (finishedHandler = jasmine.createSpy()));
 
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
 
       runs(function() {
         expect(errorHandler).not.toHaveBeenCalled();
         expect(resultsHandler).toHaveBeenCalled();
-        expect(resultsHandler.mostRecentCall.args[0]).toEqual({
+        expect(resultsHandler.calls.mostRecent().args[0]).toEqual({
           filePath,
           replacements: 6
         });
@@ -75,7 +75,7 @@ var quicksort = function () {
 };\
 `.replace(/\n/g, os.EOL);
         expect(replacedFile).toEqual(replacedContent);
-        expect(finishedHandler.mostRecentCall.args[1]).toEqual(null);
+        expect(finishedHandler.calls.mostRecent().args[1]).toEqual(null);
       });
     });
 
@@ -84,7 +84,7 @@ var quicksort = function () {
       replacer.on('path-replaced', (resultsHandler = jasmine.createSpy()));
       replacer.replacePaths(/nopenothere/gi, 'omgwow', [filePath], (finishedHandler = jasmine.createSpy()));
 
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
 
       runs(function() {
         expect(resultsHandler).not.toHaveBeenCalled();
@@ -108,7 +108,7 @@ var quicksort = function () {
         let finishedHandler;
         replacer.replacePaths(/content/gi, 'omgwow', [replaceFilePath], (finishedHandler = jasmine.createSpy()));
 
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
 
         runs(function() {
           const replacedFile = fs.readFileSync(replaceFilePath).toString();
@@ -125,11 +125,11 @@ var quicksort = function () {
       replacer.on('path-replaced', (resultsHandler = jasmine.createSpy()));
       replacer.replacePaths(/content/gi, 'omgwow', ['/doesnt-exist.js', '/nope.js'], (finishedHandler = jasmine.createSpy()));
 
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
 
       runs(function() {
         expect(resultsHandler).not.toHaveBeenCalled();
-        const errors = finishedHandler.mostRecentCall.args[1];
+        const errors = finishedHandler.calls.mostRecent().args[1];
         expect(errors.length).toBe(2);
         expect(errors[0].code).toBe('ENOENT');
       });

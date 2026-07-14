@@ -26,15 +26,15 @@ describe("search", function() {
     searcher.on('results-found', (resultsHandler = jasmine.createSpy()));
     search(/items/gi, scanner, searcher, (finishedHandler = jasmine.createSpy()));
 
-    waitsFor(() => finishedHandler.callCount > 0);
+    waitsFor(() => finishedHandler.calls.count() > 0);
 
     runs(function() {
-      expect(resultsHandler.callCount).toBe(3);
+      expect(resultsHandler.calls.count()).toBe(3);
 
       const regex = /many-files[\\/]sample(-)?.*\.js/g;
-      expect(resultsHandler.argsForCall[0][0].filePath).toMatch(regex);
-      expect(resultsHandler.argsForCall[1][0].filePath).toMatch(regex);
-      expect(resultsHandler.argsForCall[2][0].filePath).toMatch(regex);
+      expect(resultsHandler.calls.allArgs()[0][0].filePath).toMatch(regex);
+      expect(resultsHandler.calls.allArgs()[1][0].filePath).toMatch(regex);
+      expect(resultsHandler.calls.allArgs()[2][0].filePath).toMatch(regex);
     });
   }));
 
@@ -51,10 +51,10 @@ describe("search", function() {
       scanner.emit('path-found', '/nope-not-this-either.js');
       scanner.emit('finished-scanning');
 
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
 
       runs(function() {
-        expect(errorHandler.callCount).toBe(2);
+        expect(errorHandler.calls.count()).toBe(2);
         expect(resultsHandler).not.toHaveBeenCalled();
       });
     });
@@ -85,11 +85,11 @@ describe("replace", function() {
       replacer.on('path-replaced', (resultsHandler = jasmine.createSpy()));
       replace(/Some text/gi, 'kittens', scanner, replacer, (finishedHandler = jasmine.createSpy()));
 
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
 
       runs(function() {
-        expect(resultsHandler.callCount).toBe(1);
-        expect(resultsHandler.argsForCall[0][0].filePath).toContain('sample.txt');
+        expect(resultsHandler.calls.count()).toBe(1);
+        expect(resultsHandler.calls.allArgs()[0][0].filePath).toContain('sample.txt');
       });
     });
   });
@@ -107,10 +107,10 @@ describe("replace", function() {
       scanner.emit('path-found', '/nope-not-this-either.js');
       scanner.emit('finished-scanning');
 
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
 
       runs(function() {
-        expect(errorHandler.callCount).toBe(2);
+        expect(errorHandler.calls.count()).toBe(2);
         expect(resultsHandler).not.toHaveBeenCalled();
       });
     });

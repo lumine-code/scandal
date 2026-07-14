@@ -8,7 +8,7 @@
     "scandal": "./bin/scandal"
   },
   "scripts": {
-    "test": "jasmine-focused --captureExceptions spec/"
+    "test": "jasmine"
   },
   "repository": "https://github.com/lumine-code/scandal",
   "license": "MIT",
@@ -28,6 +28,6 @@
     "split": "^1.0.0"
   },
   "devDependencies": {
-    "@lumine-code/jasmine-focused": "https://github.com/lumine-code/jasmine-focused.git#6d04426bcb107dc44b148a6d48172c918326c068"
+    "jasmine": "^6.3.0"
   }
 }

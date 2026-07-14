@@ -10,7 +10,7 @@ describe("PathScanner", function() {
   const createPathCollector = function() {
     paths = [];
     const pathHandler = jasmine.createSpy();
-    pathHandler.andCallFake(p => paths.push(p));
+    pathHandler.and.callFake(p => paths.push(p));
     return pathHandler;
   };
 
@@ -24,8 +24,8 @@ describe("PathScanner", function() {
       scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
       runs(() => scanner.scan());
-      waitsFor(() => pathHandler.callCount > 0);
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => pathHandler.calls.count() > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
       runs(function() {
         const symlinkToFile = path.join(rootPath, 'symlink-to-file1.txt');
         const symlinkToDirectory = path.join(rootPath, 'symlink-to-directory');
@@ -50,7 +50,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(function() {
           expect(paths.length).toBe(5);
           expect(paths).toContain(path.join(rootPath, 'newdir', 'deep_dir.js'));
@@ -65,7 +65,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(function() {
           expect(paths.length).toBe(1);
           expect(paths).toContain(path.join(rootPath, 'dir.with.dots', 'parent-has-dots.txt'));
@@ -79,7 +79,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(() => expect(paths.length).toBe(0));
       });
 
@@ -90,7 +90,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(function() {
           expect(paths).toContain(path.join(rootPath, '.root', 'subdir', '.realhidden'));
           expect(paths).toContain(path.join(rootPath, '.root', 'subdir', 'file1.txt'));
@@ -108,7 +108,7 @@ describe("PathScanner", function() {
 
           runs(() => scanner.scan());
 
-          waitsFor(() => finishedHandler.callCount > 0);
+          waitsFor(() => finishedHandler.calls.count() > 0);
 
           runs(function() {
             expect(paths.length).toBe(1);
@@ -126,7 +126,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(() => {
           expect(paths).not.toContain(path.join(rootPath, 'dir', 'file7_ignorable.rb'))
         });
@@ -139,7 +139,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(function() {
           expect(paths).not.toContain(path.join(rootPath, 'newdir', 'deep_dir.js'));
           expect(paths).not.toContain(path.join(rootPath, 'sample.js'));
@@ -154,7 +154,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(() => expect(paths).toContain(path.join(rootPath, 'dir', 'file7_ignorable.rb')));
       });
 
@@ -165,7 +165,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(function() {
           expect(paths).toContain(path.join(rootPath, 'newdir', 'deep_dir.js'));
           expect(paths).not.toContain(path.join(rootPath, 'newdir', 'seconddir', 'very_deep_dir.js'));
@@ -179,7 +179,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(function() {
           expect(paths.length).toBe(1);
           expect(paths).not.toContain(path.join(rootPath, 'newdir', 'deep_dir.js'));
@@ -194,7 +194,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(function() {
           expect(paths).toContain(path.join(rootPath, 'file1.txt'));
           expect(paths).not.toContain(path.join(rootPath, 'file4_noext'));
@@ -210,7 +210,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(function() {
           expect(paths).toContain(path.join(rootPath, 'file4_noext'));
           expect(paths).toContain(path.join(rootPath, 'file5_not_really_image.gif'));
@@ -230,7 +230,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(function() {
           expect(paths).toContain(path.join(rootPath, 'file4_noext'));
           expect(paths).toContain(path.join(rootPath, 'file5_not_really_image.gif'));
@@ -251,7 +251,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(function() {
           expect(paths).toContain(path.join(rootPath, 'file1.txt'));
           expect(paths).toContain(path.join(rootPath, 'file2.txt'));
@@ -272,7 +272,7 @@ describe("PathScanner", function() {
         scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
         runs(() => scanner.scan());
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
         runs(function() {
           expect(paths.length).toBe(1);
           expect(paths).toContain(path.join(rootPath, '.root', 'subdir', '.realhidden'));
@@ -289,7 +289,7 @@ describe("PathScanner", function() {
           scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
           runs(() => scanner.scan());
-          waitsFor(() => finishedHandler.callCount > 0);
+          waitsFor(() => finishedHandler.calls.count() > 0);
           runs(function() {
             expect(paths.length).toBeGreaterThan(1);
             expect(paths).toContain(path.join(rootPath, 'sample.txt'));
@@ -333,7 +333,7 @@ describe("PathScanner", function() {
       scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
       runs(() => scanner.scan());
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
       runs(function() {
         expect(paths.length).toBe(4);
         expect(paths).not.toContain(path.join(rootPath, 'ignored.txt'));
@@ -347,7 +347,7 @@ describe("PathScanner", function() {
       scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
       runs(() => scanner.scan());
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
       runs(function() {
         expect(paths.length).toBe(8);
         expect(paths).toContain(path.join(rootPath, 'ignored.txt'));
@@ -361,7 +361,7 @@ describe("PathScanner", function() {
       scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
       runs(() => scanner.scan());
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
       runs(function() {
         expect(paths.length).toBe(1);
         expect(paths).toContain(path.join(rootPath, 'node_modules', 'pkg', 'sample.js'));
@@ -375,7 +375,7 @@ describe("PathScanner", function() {
       scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
       runs(() => scanner.scan());
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
       runs(function() {
         expect(paths.length).toBe(1);
         expect(paths).toContain(path.join(rootPath, 'node_modules', 'pkg', 'sample.js'));
@@ -389,7 +389,7 @@ describe("PathScanner", function() {
       scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
       runs(() => scanner.scan());
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
       runs(function() {
         expect(paths.length).toBe(6);
         expect(paths).toContain(path.join(rootPath, '.gitignore'));
@@ -403,7 +403,7 @@ describe("PathScanner", function() {
       scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
       runs(() => scanner.scan());
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
       runs(() => expect(paths).not.toContain(path.join(rootPath, '.git', 'HEAD')));
     });
 
@@ -414,7 +414,7 @@ describe("PathScanner", function() {
       scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
       runs(() => scanner.scan());
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
       runs(() => expect(paths).not.toContain(path.join(rootPath, '.gitignore')));
     });
 
@@ -425,11 +425,11 @@ describe("PathScanner", function() {
       scanner.on('finished-scanning', (finishedHandler = jasmine.createSpy()));
 
       runs(() => scanner.scan());
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
       runs(function() {
         expect(paths.length).toBe(2);
         expect(paths).toContain(path.join(subDirPath, 'file.txt'));
-        expect(paths).toNotContain(path.join(subDirPath, 'ignored.txt'));
+        expect(paths).not.toContain(path.join(subDirPath, 'ignored.txt'));
       });
     });
   });

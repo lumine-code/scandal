@@ -99,16 +99,16 @@ describe("PathSearcher", function() {
       searcher.on('results-found', (resultsHandler = jasmine.createSpy()));
       searcher.searchPath(/nope/gi, missingPath, (finishedHandler = jasmine.createSpy()));
 
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
 
       runs(function() {
         expect(resultsHandler).not.toHaveBeenCalled();
         expect(finishedHandler).toHaveBeenCalled();
-        expect(finishedHandler.mostRecentCall.args[1].code).toBe('ENOENT');
+        expect(finishedHandler.calls.mostRecent().args[1].code).toBe('ENOENT');
 
         expect(errorHandler).toHaveBeenCalled();
-        expect(errorHandler.mostRecentCall.args[0].path).toBe(missingPath);
-        expect(errorHandler.mostRecentCall.args[0].code).toBe('ENOENT');
+        expect(errorHandler.calls.mostRecent().args[0].path).toBe(missingPath);
+        expect(errorHandler.calls.mostRecent().args[0].code).toBe('ENOENT');
       });
     }));
 
@@ -120,7 +120,7 @@ describe("PathSearcher", function() {
         searcher.on('results-found', (resultsHandler = jasmine.createSpy()));
         searcher.searchPath(/nounicorns/gi, filePath, (finishedHandler = jasmine.createSpy()));
 
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
 
         runs(() => expect(resultsHandler).not.toHaveBeenCalled());
       });
@@ -130,12 +130,12 @@ describe("PathSearcher", function() {
         searcher.on('results-found', (resultsHandler = jasmine.createSpy()));
         searcher.searchPath(/items/gi, filePath, (finishedHandler = jasmine.createSpy()));
 
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
 
         runs(function() {
-          expect(resultsHandler.callCount).toBe(1);
+          expect(resultsHandler.calls.count()).toBe(1);
 
-          const results = resultsHandler.mostRecentCall.args[0];
+          const results = resultsHandler.calls.mostRecent().args[0];
           expect(results.filePath).toBe(filePath);
           expect(results.matches.length).toBe(6);
 
@@ -153,12 +153,12 @@ describe("PathSearcher", function() {
         searcher.on('results-found', (resultsHandler = jasmine.createSpy()));
         searcher.searchPath(/\)/gi, filePath, (finishedHandler = jasmine.createSpy()));
 
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
 
         runs(function() {
-          expect(resultsHandler.callCount).toBe(1);
+          expect(resultsHandler.calls.count()).toBe(1);
 
-          const results = resultsHandler.mostRecentCall.args[0];
+          const results = resultsHandler.calls.mostRecent().args[0];
           expect(results.filePath).toBe(filePath);
           expect(results.matches.length).toBe(14);
 
@@ -212,12 +212,12 @@ describe("PathSearcher", function() {
         searcher.on('results-found', (resultsHandler = jasmine.createSpy()));
         searcher.searchPath(/sort/gi, filePath, (finishedHandler = jasmine.createSpy()));
 
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
 
         runs(function() {
-          expect(resultsHandler.callCount).toBe(1);
+          expect(resultsHandler.calls.count()).toBe(1);
 
-          const results = resultsHandler.mostRecentCall.args[0];
+          const results = resultsHandler.calls.mostRecent().args[0];
           expect(results.filePath).toBe(filePath);
           expect(results.matches.length).toBe(5);
 
@@ -256,16 +256,16 @@ describe("PathSearcher", function() {
         searcher.on('results-found', (resultsHandler = jasmine.createSpy()));
         searcher.searchPaths(/nounicorns/gi, filePaths, (finishedHandler = jasmine.createSpy()));
 
-        waitsFor(() => finishedHandler.callCount > 0);
+        waitsFor(() => finishedHandler.calls.count() > 0);
 
         runs(function() {
           expect(resultsHandler).not.toHaveBeenCalled();
-          expect(noResultsHandler.callCount).toBe(4);
-          expect(noResultsHandler.argsForCall[0][0]).toBe(filePaths[0]);
-          expect(noResultsHandler.argsForCall[1][0]).toBe(filePaths[1]);
-          expect(noResultsHandler.argsForCall[1][0]).toBe(filePaths[1]);
+          expect(noResultsHandler.calls.count()).toBe(4);
+          expect(noResultsHandler.calls.allArgs()[0][0]).toBe(filePaths[0]);
+          expect(noResultsHandler.calls.allArgs()[1][0]).toBe(filePaths[1]);
+          expect(noResultsHandler.calls.allArgs()[1][0]).toBe(filePaths[1]);
 
-          const errors = finishedHandler.mostRecentCall.args[1];
+          const errors = finishedHandler.calls.mostRecent().args[1];
           expect(errors.length).toBe(2);
           expect(errors[0].code).toBe('ENOENT');
         });
@@ -278,13 +278,13 @@ describe("PathSearcher", function() {
       searcher.on('results-found', (resultsHandler = jasmine.createSpy()));
       searcher.searchPaths(/nounicorns/gi, filePaths, (finishedHandler = jasmine.createSpy()));
 
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
 
       runs(function() {
         expect(resultsHandler).not.toHaveBeenCalled();
-        expect(noResultsHandler.callCount).toBe(2);
-        expect(noResultsHandler.argsForCall[0][0]).toBe(filePaths[0]);
-        expect(noResultsHandler.argsForCall[1][0]).toBe(filePaths[1]);
+        expect(noResultsHandler.calls.count()).toBe(2);
+        expect(noResultsHandler.calls.allArgs()[0][0]).toBe(filePaths[0]);
+        expect(noResultsHandler.calls.allArgs()[1][0]).toBe(filePaths[1]);
       });
     });
 
@@ -294,20 +294,20 @@ describe("PathSearcher", function() {
       searcher.on('results-found', (resultsHandler = jasmine.createSpy()));
       searcher.searchPaths(/text/gi, filePaths, (finishedHandler = jasmine.createSpy()));
 
-      waitsFor(() => finishedHandler.callCount > 0);
+      waitsFor(() => finishedHandler.calls.count() > 0);
 
       runs(function() {
         expect(noResultsHandler).not.toHaveBeenCalled();
-        expect(resultsHandler.callCount).toBe(2);
-        expect(resultsHandler.argsForCall[0][0].filePath).toBe(filePaths[0]);
-        expect(resultsHandler.argsForCall[1][0].filePath).toBe(filePaths[1]);
+        expect(resultsHandler.calls.count()).toBe(2);
+        expect(resultsHandler.calls.allArgs()[0][0].filePath).toBe(filePaths[0]);
+        expect(resultsHandler.calls.allArgs()[1][0].filePath).toBe(filePaths[1]);
 
         // should have all the results as an arg in the done callback
         const results = [
-          resultsHandler.argsForCall[0][0],
-          resultsHandler.argsForCall[1][0]
+          resultsHandler.calls.allArgs()[0][0],
+          resultsHandler.calls.allArgs()[1][0]
         ];
-        expect(finishedHandler.mostRecentCall.args[0]).toEqual(results);
+        expect(finishedHandler.calls.mostRecent().args[0]).toEqual(results);
       });
     });
   });

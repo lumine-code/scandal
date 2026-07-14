@@ -26,7 +26,7 @@ describe("ChunkedLineReader", function() {
 
     reader.on('data', dataHandler);
 
-    waitsFor(() => errorHandler.callCount > 0);
+    waitsFor(() => errorHandler.calls.count() > 0);
 
     runs(function() {
       expect(errorHandler).toHaveBeenCalled();
@@ -47,7 +47,7 @@ describe("ChunkedLineReader", function() {
       allLines = allLines.concat(line.split(os.EOL));
     });
 
-    waitsFor(() => endHandler.callCount > 0);
+    waitsFor(() => endHandler.calls.count() > 0);
 
     runs(function() {
       const sample = [
@@ -83,7 +83,7 @@ describe("ChunkedLineReader", function() {
       allLines = allLines.concat(line.split(os.EOL));
     });
 
-    waitsFor(() => endHandler.callCount > 0);
+    waitsFor(() => endHandler.calls.count() > 0);
 
     runs(function() {
       const sample = [
@@ -120,7 +120,7 @@ describe("ChunkedLineReader", function() {
       return allLines = allLines.concat(line.split('\r\n'));
     });
 
-    waitsFor(() => endHandler.callCount > 0);
+    waitsFor(() => endHandler.calls.count() > 0);
 
     runs(function() {
       const sample = [
@@ -155,7 +155,7 @@ describe("ChunkedLineReader", function() {
       allLines = allLines.concat(line.split(os.EOL));
     });
 
-    waitsFor(() => endHandler.callCount > 0);
+    waitsFor(() => endHandler.calls.count() > 0);
 
     runs(function() {
       const sampleText = fs.readFileSync(rootPath, {encoding: 'utf8'});
