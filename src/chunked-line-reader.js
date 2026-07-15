@@ -1,5 +1,4 @@
 const fs = require("fs");
-const {isBinaryFileSync} = require("isbinaryfile");
 const {Readable} = require('stream');
 const {StringDecoder} = require('string_decoder');
 
@@ -9,6 +8,21 @@ function lastIndexOf(buffer, length, char) {
     if (buffer[i] === char) { return i; }
   }
   return -1;
+}
+
+// Treat a file as binary when its header contains a NUL byte, unless a Unicode
+// byte-order mark marks it as UTF-16/32 text (which legitimately contains NULs).
+// This is the same heuristic the isbinaryfile package applied here.
+function isBinaryHeader(buffer, bytesRead) {
+  if (bytesRead === 0) { return false; }
+  const length = Math.min(bytesRead, buffer.length);
+  if (length >= 2 && buffer[0] === 0xff && buffer[1] === 0xfe) { return false; } // UTF-16/32 LE
+  if (length >= 2 && buffer[0] === 0xfe && buffer[1] === 0xff) { return false; } // UTF-16 BE
+  if (length >= 3 && buffer[0] === 0xef && buffer[1] === 0xbb && buffer[2] === 0xbf) { return false; } // UTF-8
+  for (let i = 0; i < length; i++) {
+    if (buffer[i] === 0) { return true; }
+  }
+  return false;
 }
 
 // Will ensure data will be read on a line boundary. So this will always do the
@@ -36,7 +50,7 @@ class ChunkedLineReader extends Readable {
 
   isBinaryFile() {
     const fd = fs.openSync(this.filePath, "r");
-    const isBin = isBinaryFileSync(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256));
+    const isBin = isBinaryHeader(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256));
     fs.closeSync(fd);
     return isBin;
   }
@@ -49,7 +63,7 @@ class ChunkedLineReader extends Readable {
       let remainder = '';
       const chunkSize = this.CHUNK_SIZE;
       if (
-        isBinaryFileSync(
+        isBinaryHeader(
           this.headerBuffer,
           fs.readSync(fd, this.headerBuffer, 0, 256)
         )
