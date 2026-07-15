@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "argparse": "^3.0.0",
-    "@lumine-code/git-utils": "https://github.com/lumine-code/git-utils.git#902c0ef4035d870cc4b968baebd06eab3d8acf3e",
+    "@lumine-code/git-utils": "https://github.com/lumine-code/git-utils.git#2858d7ab4f2553b33944e0bb604a2d40919dda62",
     "minimatch": "^10.2.5",
     "split": "^1.0.0"
   },
