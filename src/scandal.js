@@ -17,19 +17,21 @@ well.
 */
 const main = function() {
   const argParser = new ArgumentParser({
-    version: require('../package.json').version,
-    addHelp: true,
     description: 'List paths, search, and replace in a directory'
   });
 
-  argParser.addArgument([ '-e', '--excludeVcsIgnores' ], {action: 'storeTrue'});
-  argParser.addArgument([ '-o', '--verbose' ], {action: 'storeTrue'});
-  argParser.addArgument([ '-d', '--dryReplace' ], {action: 'storeTrue'});
-  argParser.addArgument([ '-s', '--search' ]);
-  argParser.addArgument([ '-r', '--replace' ]);
-  argParser.addArgument(['pathToScan']);
+  argParser.add_argument('-v', '--version', {
+    action: 'version',
+    version: require('../package.json').version
+  });
+  argParser.add_argument('-e', '--excludeVcsIgnores', {action: 'store_true'});
+  argParser.add_argument('-o', '--verbose', {action: 'store_true'});
+  argParser.add_argument('-d', '--dryReplace', {action: 'store_true'});
+  argParser.add_argument('-s', '--search');
+  argParser.add_argument('-r', '--replace');
+  argParser.add_argument('pathToScan');
 
-  const options = argParser.parseArgs();
+  const options = argParser.parse_args();
 
   if (options.search && options.replace) {
     return singleProcessReplaceMain(options);

@@ -21,7 +21,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "argparse": "^2.0.1",
+    "argparse": "^3.0.0",
     "@lumine-code/git-utils": "https://github.com/lumine-code/git-utils.git#902c0ef4035d870cc4b968baebd06eab3d8acf3e",
     "minimatch": "^10.2.5",
     "split": "^1.0.0"
