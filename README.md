@@ -127,6 +127,19 @@ search(/text/ig, scanner, searcher, () => {
 });
 ```
 
+## Changes
+
+This is the Lumine fork of `scandal`, published under the `@lumine-code` scope. Relative to the upstream Pulsar package it:
+
+- Rebrands the package to `@lumine-code/scandal` and releases it as a new major version.
+- Ports the CLI to `argparse` 3.
+- Drops the `isbinaryfile` dependency in favor of a native NUL-byte binary check.
+- Filters ignored files through the `@lumine-code/git-utils` fork and releases the git repository after each scan.
+- Fixes Windows symlink containment when scanning trees.
+- Migrates the test suite to Jasmine 6 and isolates the git spec fixture.
+- Adds cross-platform (Windows, macOS, Linux) CI and modernizes the publish workflows.
+- Updates the license attribution for Lumine.
+
 ## Contributing
 
 Got ideas to make this package better, found a bug, or want to help add new features? Just drop your thoughts on GitHub. Any feedback is welcome!
