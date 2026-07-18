@@ -2,6 +2,9 @@
 
 Scans and searches directory trees with Git-aware filtering.
 
+> [!WARNING]
+> **This package is deprecated.** [Lumine](https://github.com/lumine-code/lumine) no longer depends on it — project search and replace now run through ripgrep. This repository is archived and no longer maintained.
+
 ## Features
 
 - **Directory scanning**: walks trees with configurable inclusions, exclusions, and hidden-file handling.
