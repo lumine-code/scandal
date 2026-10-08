@@ -21,9 +21,9 @@ npm install @lumine-code/scandal
 
 `scandal` provides two utilities:
 
-* Scanning a directory for paths matching a set of glob inclusions or exclusions. For example, you want to find a list of paths to search that match a certain pattern, but are not ignored by the `.gitignore`.
+- Scanning a directory for paths matching a set of glob inclusions or exclusions. For example, you want to find a list of paths to search that match a certain pattern, but are not ignored by the `.gitignore`.
 
-* Searching a list of paths for a regex. For example, you have a list of paths, you want to find all instances of `/text/gi`.
+- Searching a list of paths for a regex. For example, you have a list of paths, you want to find all instances of `/text/gi`.
 
 Unsurprisingly, these two things can be combined to scan and search a directory.
 
@@ -44,11 +44,11 @@ To be clear, scandal is not a CLI. It can be used from the terminal, but in prac
 Usage is simple:
 
 ```js
-const { PathScanner } = require('@lumine-code/scandal');
-let scanner = new PathScanner('/Users/me/myDopeProject', options);
+const { PathScanner } = require("@lumine-code/scandal");
+let scanner = new PathScanner("/Users/me/myDopeProject", options);
 
-scanner.on('path-found', (path) => console.log(path));
-scanner.on('finished-scanning', () => console.log('All done!'));
+scanner.on("path-found", (path) => console.log(path));
+scanner.on("finished-scanning", () => console.log("All done!"));
 
 scanner.scan();
 ```
@@ -57,31 +57,31 @@ scanner.scan();
 
 #### options
 
-* _excludeVcsIgnores_ - bool; default false; true to exclude paths defined in a .gitignore. Uses [@lumine-code/git-utils](https://github.com/lumine-code/git-utils) to check ignored files.
-* _inclusions_ - list of patterns to include. Uses [minimatch](https://github.com/isaacs/minimatch) with a couple additions: `['dirname']` and `['dirname/']` will match all paths in direcotry `dirname`
-* _exclusions_ - list of patterns to exclude. Same matcher as `inclusions`.
-* _includeHidden_ - bool; default false; true includes hidden files.
+- _excludeVcsIgnores_ - bool; default false; true to exclude paths defined in a .gitignore. Uses [@lumine-code/git-utils](https://github.com/lumine-code/git-utils) to check ignored files.
+- _inclusions_ - list of patterns to include. Uses [minimatch](https://github.com/isaacs/minimatch) with a couple additions: `['dirname']` and `['dirname/']` will match all paths in direcotry `dirname`
+- _exclusions_ - list of patterns to exclude. Same matcher as `inclusions`.
+- _includeHidden_ - bool; default false; true includes hidden files.
 
 ### PathSearcher
 
 ```js
-const { PathSearcher } = require('@lumine-code/scandal');
+const { PathSearcher } = require("@lumine-code/scandal");
 let searcher = new PathSearcher();
 
 // You can subscribe to a `results-found` event
-searcher.on('results-found', (result) => {
+searcher.on("results-found", (result) => {
   // result will contain all the matches for a single path
   console.log("Single Path's Results", result);
 });
 
 // Search a list of paths
-searcher.searchPaths(/text/gi, (['/Some/path', /* ... */]), (results) => {
-  console.log('Done Searching', results);
+searcher.searchPaths(/text/gi, ["/Some/path" /* ... */], (results) => {
+  console.log("Done Searching", results);
 });
 
 // Search a single path
-searcher.searchPath(/text/gi, '/Some/path', (result) => {
-  console.log('Done Searching', result);
+searcher.searchPath(/text/gi, "/Some/path", (result) => {
+  console.log("Done Searching", result);
 });
 ```
 
@@ -94,7 +94,10 @@ Results from line 10 (1-based) are in the following format:
     "matchText": "Text",
     "lineText": "Text in this file!",
     "lineTextOffset": 0,
-    "range": [[9, 0], [9, 4]]
+    "range": [
+      [9, 0],
+      [9, 4]
+    ]
   }
 }
 ```
@@ -112,20 +115,20 @@ A third object, `PathFilter`, is available, but intended for use by the `PathSca
 If you dont want to think about combining the `PathScanner` and `PathSearcher` in your own way, a `search` function is provided.
 
 ```js
-const { search, PathScanner, PathSearcher } = require('@lumine-code/scandal');
+const { search, PathScanner, PathSearcher } = require("@lumine-code/scandal");
 
-let path = '/path/to/search';
+let path = "/path/to/search";
 let scanner = new PathScanner(path, { excludeVcsIgnores: true });
 let searcher = new PathSearcher();
 
-searcher.on('results-found', (result) => {
+searcher.on("results-found", (result) => {
   // do something rad with the result!
 });
 
 let name = `Search ${path}`;
 console.time(name);
 console.log(name);
-search(/text/ig, scanner, searcher, () => {
+search(/text/gi, scanner, searcher, () => {
   console.timeEnd(name);
 });
 ```
