@@ -1,7 +1,7 @@
 {
   "name": "@lumine-code/scandal",
   "author": "lumine-code",
-  "version": "5.0.0",
+  "version": "1.0.0",
   "description": "Scans and searches directory trees with Git-aware filtering.",
   "main": "./src/scandal.js",
   "bin": {
